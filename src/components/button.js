@@ -9,13 +9,13 @@ export const Button = styled.button`
   padding: 4px 16px;
   border-radius: 4px;
   border: none;
+  color: ${({ theme }) => theme.colors.white};
 
   ${({ alugarHome }) => alugarHome && css`
     font-size: 14px;
     padding: 3px 15px;
     background: transparent;
     border: 1px solid ${({ theme }) => theme.colors.white};
-    color: ${({ theme }) => theme.colors.white};
     transition: all 0.3s ease-in;
   `};
 
@@ -25,12 +25,18 @@ export const Button = styled.button`
     padding: 3px 15px;
     background: ${({ theme }) => theme.colors.primary.main};
     border: 1px solid transparent;
-    color: ${({ theme }) => theme.colors.white};
     transition: background 0.3s ease-in;
   `};
 
   ${({ selected }) => selected && css`
     background: ${({ theme }) => theme.colors.highlight.main};
+  `};
+
+  ${({ homeSearch }) => homeSearch && css`
+    height: 40px;
+    background: ${({ theme }) => theme.colors.highlight.main};
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
   `};
 
   &:hover {

@@ -16,7 +16,7 @@ export const Container = styled.div`
 export const Form = styled.form`
   width: 50%;
   margin-top: 10%;
-  height: 300px;
+  margin-bottom: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,8 +37,8 @@ export const Title = styled.p`
 `;
 
 export const SearchBar = styled.div`
-  width: 60%;
   max-width: 700px;
+  width: 100%;
   height: 40px;
   margin-top: 40px;
   background: ${({ theme }) => theme.colors.white};
@@ -46,5 +46,5 @@ export const SearchBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  filter: drop-shadow(0px, 4px, 10px rgba(0, 0, 0, 0.5));
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 `;

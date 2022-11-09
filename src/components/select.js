@@ -5,7 +5,7 @@ export const Select = styled.select`
     margin: 0px 10px;
   }
 
-  font-size: 14px;
+  font-size: 12px;
   border-radius: 4px;
   border: none;
   text-align: left;

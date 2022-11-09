@@ -1,67 +1,120 @@
-import React, { useState, useLayoutEffect } from 'react';
-import Header from '../../components/Header';
+/* eslint-disable max-len */
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import HomeHeader from './components/Header';
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { Select } from '../../components/select';
 import {
   Container, Form, Buttons, SearchBar, Title,
 } from './styles';
+import IntelimoveisServices from '../../services/IntelimoveisServices';
 
 export default function Home() {
+  const navigate = useHistory();
   const [alugarSelecet, setAlugarSelect] = useState(false);
   const [venderSelecet, setVenderSelect] = useState(false);
+  const [tipoImovel, setTipoimovel] = useState();
+  const [tipoNegocio, setTipoNegocio] = useState();
+  const [searchTerm, setSearchTerm] = useState();
   const [imoveis, setImoveis] = useState([]);
+  const [imoveisFiltered, setImoveisFiltered] = useState([]);
+  const [bairro, setBairro] = useState();
+  const [cidade, setCidade] = useState();
+  const [codImovel, setCodImovel] = useState();
 
-  async function getImoveis() {
-    await fetch('http://127.0.0.1:3000/imoveis')
-    // eslint-disable-next-line no-console
-      .then((response) => response.json())
-      .then((data) => setImoveis(data));
+  async function getInitialImoveis() {
+    await IntelimoveisServices.getImoveis()
+      .then((response) => setImoveis(response));
   }
 
-  console.log(imoveis);
+  function filterImoveis(event) {
+    setSearchTerm(event.target.value);
 
-  useLayoutEffect(() => {
-    getImoveis();
-  }, []);
+    const filterByCityOrNeighborOrCode = imoveis.filter((imovel) => imovel.cidade.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.bairro.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.cod_imovel === Number(event.target.value));
+    const removeDuplicates = filterByCityOrNeighborOrCode.filter((value, index, array) => array.findIndex((secondValue) => (secondValue.cidade === value.cidade)) === index);
 
-  function handleChangeSelectButton(button, e) {
-    e.preventDefault();
+    setImoveisFiltered(removeDuplicates.sort((a, b) => (a > b ? 1 : -1)));
+  }
 
-    if (button === 'alugar') {
+  function handleChangeSelectButton(button) {
+    if (button === 'aluguel') {
+      setTipoNegocio(button);
       setAlugarSelect(true);
       setVenderSelect(false);
     }
 
-    if (button === 'vender') {
+    if (button === 'venda') {
+      setTipoNegocio(button);
       setVenderSelect(true);
       setAlugarSelect(false);
     }
   }
 
+  function handleSelectSearchImovel(event, data) {
+    event.preventDefault();
+
+    setSearchTerm(event.target.value);
+
+    setBairro(data.bairro);
+    setCidade(data.cidade);
+    setCodImovel(data.cod_imovel);
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    try {
+      await IntelimoveisServices.getImoveisSearch(tipoNegocio, tipoImovel, bairro, cidade)
+        .then((response) => {
+          localStorage.setItem('imoveis', JSON.stringify(response));
+        });
+
+      navigate.push({ pathname: '/imoveis/list', name: 'Resultado da busca' });
+    } catch {
+      console.log('Erro', codImovel);
+    }
+  }
+
+  useEffect(() => {
+    getInitialImoveis();
+  }, []);
+
   return (
     <Container>
-      <Header />
-      <Form>
+      <HomeHeader />
+      <Form onSubmit={(event) => handleSubmit(event)}>
         <Title>O seu novo lar em Contagem está aqui.</Title>
         <Buttons>
-          <Button alugarHome selected={alugarSelecet} onClick={(e) => handleChangeSelectButton('alugar', e)}>Alugar</Button>
-          <Button comprarHome selected={venderSelecet} onClick={(e) => handleChangeSelectButton('vender', e)}>Comprar</Button>
+          <Button alugarHome selected={alugarSelecet} onClick={() => handleChangeSelectButton('aluguel')} type="button">Alugar</Button>
+          <Button comprarHome selected={venderSelecet} onClick={() => handleChangeSelectButton('venda')} type="button">Comprar</Button>
         </Buttons>
         <SearchBar>
-          <Select tipoImovelHome>
-            <option disabled selected>Selecione o tipo</option>
-            <option>Apartamento</option>
-            <option>Casa</option>
-            <option>Sala</option>
-            <option>Andar</option>
-            <option>Lote</option>
-            <option>Loja</option>
-            <option>Galpão</option>
+          <Select tipoImovelHome onChange={(event) => setTipoimovel(event.target.value)}>
+            <option value="">Selecione o tipo</option>
+            <option value="apartamento">Apartamento</option>
+            <option value="casa">Casa</option>
+            <option value="sala">Sala</option>
+            <option value="andar">Andar</option>
+            <option value="lote">Lote</option>
+            <option value="loja">Loja</option>
+            <option value="galpao">Galpão</option>
           </Select>
-          <Input type="search" placeholder="Digite uma cidade, bairro ou código do imóvel" search />
+          <Input type="search" placeholder="Digite uma cidade, bairro ou código do imóvel" search onChange={(event) => filterImoveis(event)} value={searchTerm} />
+          <Button homeSearch type="submit">Buscar</Button>
         </SearchBar>
       </Form>
+      {searchTerm && (
+        imoveisFiltered.map((imovel) => (
+          <Input
+            suggestion
+            type="button"
+            value={`${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
+            key={imovel.cod_imovel}
+            onClick={(event) => handleSelectSearchImovel(event, { bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
+          />
+        ))
+      )}
     </Container>
   );
 }

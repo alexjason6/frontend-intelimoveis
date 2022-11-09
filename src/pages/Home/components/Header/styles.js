@@ -3,13 +3,7 @@ import styled from 'styled-components';
 export const Header = styled.header`
   width: 100%;
   height: 80px;
-  background: ${({ theme }) => theme.colors.white};
-`;
-
-export const Container = styled.div`
-  max-width: 1700px;
-  width: 100%;
-  margin: 0 auto;
+  background: transparent;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -22,19 +16,17 @@ export const Logo = styled.img`
 `;
 
 export const Menu = styled.div`
-  width: 100%;
+  width: 80%;
   text-align: right;
 
   a {
     font-size: 14px;
     text-decoration: none;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.grays.main};
-    margin-right: 20px;
-    transition: color 0.2s ease-in;
+    color: ${({ theme }) => theme.colors.white};
   }
   a:hover {
-    color: ${({ theme }) => theme.colors.primary.main};
-    transition: color 0.2s ease-in;
+    color: ${({ theme }) => theme.colors.grays.lighter};
+    animation: color ease-in 800;
   }
 `;

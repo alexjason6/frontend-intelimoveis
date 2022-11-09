@@ -1,13 +1,23 @@
-import logo from '../../assets/images/cdt-imobiliaria-logo.svg';
-import { Container, Logo, Menu } from './styles';
+import { Link } from 'react-router-dom';
 
-export default function Header() {
+import logo from '../../assets/images/cdt-imobiliaria-logo.svg';
+
+import {
+  Header, Container, Logo, Menu,
+} from './styles';
+
+export default function GeralHeader() {
   return (
-    <Container>
-      <Logo src={logo} alt="CDT Imobiliária em Contagem/MG" />
-      <Menu>
-        <a href="#/">Entrar</a>
-      </Menu>
-    </Container>
+    <Header>
+      <Container>
+        <Link to="/"><Logo src={logo} alt="CDT Imobiliária em Contagem/MG" /></Link>
+        <Menu>
+          <a href="#/">Contato</a>
+          <a href="#/">Anunciar meu imóvel</a>
+          <a href="#/">Entrar</a>
+        </Menu>
+      </Container>
+
+    </Header>
   );
 }
