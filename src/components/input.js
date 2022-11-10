@@ -1,10 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const Input = styled.input`
-  &+& {
-    margin: 1px 10px;
-  }
-
+  height: 30px;
   font-size: 14px;
   border-radius: 4px;
   border: none;
@@ -23,7 +20,13 @@ export const Input = styled.input`
   `};
 
   ${({ suggestion }) => suggestion && css`
-    width: 400px;
+
+    & + & {
+      margin-top: 2px;
+    }
+
+    max-width: 700px;
+    width: 100%;
     padding: 4px 0px;
     font-size: 12px;
     font-weight: 600;
@@ -31,6 +34,34 @@ export const Input = styled.input`
     background: ${({ theme }) => theme.colors.grays.lighter};
     color: ${({ theme }) => theme.colors.grays.dark};
     cursor: pointer;
+  `};
+
+  ${({ filterBar }) => filterBar && css`
+    width: 90%;
+    font-size: 10px;
+    padding: 5px;
+    background: ${({ theme }) => theme.colors.grays.lighter};
+    color: ${({ theme }) => theme.colors.grays.main};
+    outline: none;
+  `};
+
+  ${({ filterBarValor }) => filterBarValor && css`
+    width: 48%;
+    font-size: 10px;
+    padding: 5px;
+    margin-right: 5px;
+    background: ${({ theme }) => theme.colors.grays.lighter};
+    color: ${({ theme }) => theme.colors.grays.main};
+    outline: none;
+  `};
+
+  ${({ checkbox }) => checkbox && css`
+    height: 20px;
+    font-size: 10px;
+    padding: 5px;
+    margin-right: 5px;
+    color: ${({ theme }) => theme.colors.grays.main};
+    border: 0;
   `};
 
   &:focus {

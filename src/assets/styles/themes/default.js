@@ -13,6 +13,7 @@ export default {
     grays: {
       lighter: '#e5e5e5',
       light: '#bfbfbf',
+      mainLight: '#666666',
       main: '#404040',
       dark: '#222222',
     },
@@ -31,5 +32,6 @@ export default {
       dark: '#b40c00',
     },
     white: '#ffffff',
+    white70: 'rgba(255, 255, 255, 0.7)',
   },
 };

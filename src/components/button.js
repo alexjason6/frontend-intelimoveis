@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components';
 
 export const Button = styled.button`
-  &+& {
-    margin: 0px 10px;
-  }
 
   font-size: 14px;
   padding: 4px 16px;
@@ -11,25 +8,24 @@ export const Button = styled.button`
   border: none;
   color: ${({ theme }) => theme.colors.white};
 
-  ${({ alugarHome }) => alugarHome && css`
-    font-size: 14px;
-    padding: 3px 15px;
-    background: transparent;
-    border: 1px solid ${({ theme }) => theme.colors.white};
-    transition: all 0.3s ease-in;
-  `};
 
-  ${({ comprarHome }) => comprarHome && css`
+  ${({ home }) => home && css`
+    & + & {
+      margin-left: 10px;
+    }
+
     font-size: 14px;
     font-weight: 600;
     padding: 3px 15px;
-    background: ${({ theme }) => theme.colors.primary.main};
+    background: ${({ theme }) => theme.colors.white70};
+    color: ${({ theme }) => theme.colors.grays.dark};
     border: 1px solid transparent;
     transition: background 0.3s ease-in;
   `};
 
   ${({ selected }) => selected && css`
-    background: ${({ theme }) => theme.colors.highlight.main};
+    background: ${({ theme }) => theme.colors.primary.main};
+    color: ${({ theme }) => theme.colors.white};
   `};
 
   ${({ homeSearch }) => homeSearch && css`
@@ -39,17 +35,35 @@ export const Button = styled.button`
     border-bottom-left-radius: 0px;
   `};
 
-  &:hover {
-    ${({ alugarHome }) => alugarHome && css`
-    background: ${({ theme }) => theme.colors.white};
-    color: ${({ theme }) => theme.colors.primary.main};
-    transition: all 0.3s ease-in;
+  ${({ filterBar }) => filterBar && css`
+    height: 30px;
+    font-size: 10px;
+    background: ${({ theme }) => theme.colors.grays.lighter};
+    color: ${({ theme }) => theme.colors.grays.main};
   `};
 
-  ${({ comprarHome }) => comprarHome && css`
+  ${({ pageHeader }) => pageHeader && css`
+    & + & {
+        margin-left: 10px;
+      }
+    font-size: 14px;
+    padding: 3px 15px;
+    background: ${({ theme }) => theme.colors.highlight.main};
+    color: ${({ theme }) => theme.colors.white};
+    border: 1px solid transparent;
+    transition: background 0.3s ease-in;
+  `};
+
+  &:hover {
+  ${({ home }) => home && css`
     background: ${({ theme }) => theme.colors.highlight.main};
     color: ${({ theme }) => theme.colors.grays.dark};
     transition: all 0.3s ease-in;
+  `};
+
+  ${({ pageHeader }) => pageHeader && css`
+    background: ${({ theme }) => theme.colors.primary.main};
+    transition: background 0.3s ease-in;
   `};
   }
 `;

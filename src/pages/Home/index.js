@@ -12,15 +12,13 @@ import IntelimoveisServices from '../../services/IntelimoveisServices';
 
 export default function Home() {
   const navigate = useHistory();
-  const [alugarSelecet, setAlugarSelect] = useState(false);
-  const [venderSelecet, setVenderSelect] = useState(false);
-  const [tipoImovel, setTipoimovel] = useState();
-  const [tipoNegocio, setTipoNegocio] = useState();
-  const [searchTerm, setSearchTerm] = useState();
+  const [tipoImovel, setTipoimovel] = useState('');
+  const [tipoNegocio, setTipoNegocio] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [imoveis, setImoveis] = useState([]);
   const [imoveisFiltered, setImoveisFiltered] = useState([]);
-  const [bairro, setBairro] = useState();
-  const [cidade, setCidade] = useState();
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
   const [codImovel, setCodImovel] = useState();
 
   async function getInitialImoveis() {
@@ -37,17 +35,13 @@ export default function Home() {
     setImoveisFiltered(removeDuplicates.sort((a, b) => (a > b ? 1 : -1)));
   }
 
-  function handleChangeSelectButton(button) {
-    if (button === 'aluguel') {
-      setTipoNegocio(button);
-      setAlugarSelect(true);
-      setVenderSelect(false);
+  function handleChangeSelectButton(tipo) {
+    if (tipo === 'aluguel') {
+      setTipoNegocio(tipo);
     }
 
-    if (button === 'venda') {
-      setTipoNegocio(button);
-      setVenderSelect(true);
-      setAlugarSelect(false);
+    if (tipo === 'venda') {
+      setTipoNegocio(tipo);
     }
   }
 
@@ -86,8 +80,8 @@ export default function Home() {
       <Form onSubmit={(event) => handleSubmit(event)}>
         <Title>O seu novo lar em Contagem está aqui.</Title>
         <Buttons>
-          <Button alugarHome selected={alugarSelecet} onClick={() => handleChangeSelectButton('aluguel')} type="button">Alugar</Button>
-          <Button comprarHome selected={venderSelecet} onClick={() => handleChangeSelectButton('venda')} type="button">Comprar</Button>
+          <Button home selected={tipoNegocio === 'aluguel'} onClick={() => handleChangeSelectButton('aluguel')} type="button">Alugar</Button>
+          <Button home selected={tipoNegocio === 'venda'} onClick={() => handleChangeSelectButton('venda')} type="button">Comprar</Button>
         </Buttons>
         <SearchBar>
           <Select tipoImovelHome onChange={(event) => setTipoimovel(event.target.value)}>
@@ -109,7 +103,7 @@ export default function Home() {
           <Input
             suggestion
             type="button"
-            value={`${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
+            value={Number(searchTerm) ? `COD. ${imovel.cod_imovel} - ${imovel.tipo_imovel} para ${imovel.tipo_negocio} em ${imovel.bairro} - ${imovel.cidade}/${imovel.estado}` : `${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
             key={imovel.cod_imovel}
             onClick={(event) => handleSelectSearchImovel(event, { bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
           />
