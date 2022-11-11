@@ -4,7 +4,6 @@ export const Container = styled.div`
   width: 300px;
   height: 225px;
   overflow: hidden;
-
   background: ${({ theme }) => theme.colors.grays.light};
 `;
 
@@ -16,13 +15,13 @@ export const CarouselItem = styled.div`
   background-size: cover;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
-  opacity: 0;
   transition: all 0.4s ease-in;
 
   ${({ active }) => active && css`
     width: 300px;
     height: 100%;
     display: inline-block;
+    visibility: visible;
     opacity: 1;
     transition: all 0.4s ease-in;
   `}
@@ -34,5 +33,4 @@ export const Arrows = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 `;

@@ -47,8 +47,18 @@ export default function Carousel() {
           key={item}
         >
           <Arrows>
-            <FiChevronLeft color="#ffffff" size={20} onClick={() => handleChangeSlide(index, 'back')} />
-            <FiChevronRight color="#ffffff" size={20} onClick={() => handleChangeSlide(index, 'next')} />
+            <FiChevronLeft
+              color="#ffffff"
+              size={20}
+              onClick={() => handleChangeSlide(index, 'back')}
+              style={{ cursor: 'pointer', filter: 'drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5))' }}
+            />
+            <FiChevronRight
+              color="#ffffff"
+              size={20}
+              onClick={() => handleChangeSlide(index, 'next')}
+              style={{ cursor: 'pointer', filter: 'drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5))' }}
+            />
           </Arrows>
         </CarouselItem>
       ))}

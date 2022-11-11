@@ -5,7 +5,7 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  max-width: 1700px;
+  max-width: 1280px;
   width: 100%;
   margin: 20px auto;
   display: flex;
@@ -20,23 +20,11 @@ export const Buttons = styled.div`
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-
-  div {
-    display: flex;
-    align-items: center;
-  };
-
-  span {
-    margin-left: 20px;
-    font-size: 12px;
-    color: ${({ theme }) => theme.colors.grays.mainLight};
-  }
 `;
 
-export const Imovel = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  background: ${({ theme }) => theme.colors.white};
-  border: 1px solid ${({ theme }) => theme.colors.highlight.main};
-  border-radius: 4px;
+export const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.grays.mainLight};
 `;

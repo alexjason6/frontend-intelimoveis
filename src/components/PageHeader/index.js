@@ -15,11 +15,11 @@ export default function PageHeader({ children, title, description }) {
 }
 
 PageHeader.defaultProps = {
-  children: PropTypes.element,
+  children: PropTypes.node,
 };
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  children: PropTypes.element,
+  children: PropTypes.node,
 };

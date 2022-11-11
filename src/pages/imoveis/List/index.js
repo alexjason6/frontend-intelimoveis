@@ -5,12 +5,17 @@ import Header from '../../../components/Header';
 import BreadCrumbs from '../../../components/Breadcrumbs';
 import PageHeader from '../../../components/PageHeader';
 import { Button } from '../../../components/button';
+import FilterBar from './components/Filterbar';
+import ListImovel from './components/ListImovel';
 
 import {
-  Container, Content, ImoveisContent, Buttons, Imovel,
+  Container,
+  Content,
+  ImoveisContent,
+  Buttons,
+  ButtonContainer,
 } from './styles';
-import FilterBar from './components/Filterbar';
-import Carousel from '../../../components/Carousel';
+import Footer from '../../../components/Footer';
 
 export default function ListImoveis() {
   const [imoveis, setImoveis] = useState([]);
@@ -25,6 +30,8 @@ export default function ListImoveis() {
     getImoveis();
   }, []);
 
+  console.log(imoveis);
+
   return (
     <Container>
       <Header />
@@ -34,24 +41,22 @@ export default function ListImoveis() {
         <ImoveisContent>
           <PageHeader title="Casas à venda em Salvador." description={`Sua busca resultou em ${imoveis.length} ${imoveis.length > 1 ? 'imóveis' : 'imovel'}.`}>
             <Buttons>
-              <div>
+              <ButtonContainer>
                 <Button pageHeader>Comprar</Button>
                 <Button pageHeader>Alugar</Button>
-              </div>
-              <div>
-                <BsFilterLeft size={25} color="#0da52e" />
-                <span>Ordernar</span>
-              </div>
+              </ButtonContainer>
+              <ButtonContainer>
+                <BsFilterLeft size={25} color="#0da52e" style={{ marginRight: '20' }} />
+                Ordernar
+              </ButtonContainer>
             </Buttons>
           </PageHeader>
-          {/*         {imoveis.length >= 1 ? imoveis.map((item) => (
-          <span key={item.cod_imovel}>{item.nome}</span>
-        )) : <span>oi</span>} */}
-          <Imovel>
-            <Carousel />
-          </Imovel>
+          {imoveis.length >= 1 ? imoveis.map((item) => (
+            <ListImovel imovel={item} />
+          )) : <span>oi</span>}
         </ImoveisContent>
       </Content>
+      <Footer />
     </Container>
   );
 }

@@ -7,7 +7,7 @@ export const Header = styled.header`
 `;
 
 export const Container = styled.div`
-  max-width: 1700px;
+  max-width: 1280px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -29,7 +29,7 @@ export const Menu = styled.div`
     font-size: 14px;
     text-decoration: none;
     font-weight: 600;
-    color: ${({ theme }) => theme.colors.grays.main};
+    color: ${({ theme }) => theme.colors.grays.mainLight};
     margin-right: 20px;
     transition: color 0.2s ease-in;
   }
