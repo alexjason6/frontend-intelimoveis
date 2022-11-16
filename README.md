@@ -10,8 +10,11 @@ Este projeto utiliza Create React App e uma API em NodeJS, Docker e PostgreSQL.
 ## Instalação
 
 Você precisa ter instalado em sua máquina os itens abaixo:
+
 •[NodeJS](https://nodejs.org),
+
 •[Docker](https://www.docker.com) com uma imagem postgres,
+
 •[Back-end](https://github.com/alexjason6/backend-intelimoveis).
 
 
@@ -27,9 +30,9 @@ Depois disso, instale as dependências do Front-end:
 
 ## Executando a aplicação
 
-Rode o Docker, e a imagem postgres, crie um banco de dados e roder o Back-end.
+Rode o Docker e a imagem postgres, crie um banco de dados e rode o Back-end.
 
-Após rodaro back-end execute o seguinte comando:
+Após rodar o back-end execute o seguinte comando:
 ```sh
   $ yarn start # ou npm run start
 ```
