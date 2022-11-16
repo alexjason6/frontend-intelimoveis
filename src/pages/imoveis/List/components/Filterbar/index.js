@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { Button } from '../../../../../components/button';
@@ -9,7 +10,19 @@ import {
   Container, Title, Label, BoxSearch, Localizacao, BoxInfo,
 } from './styles';
 
-export default function FilterBar({ title }) {
+export default function FilterBar({ title, allImoveis }) {
+  const [searchTerm, setSearchTerm] = useState([]);
+
+  function handleSelectSearchImovel(event /* data */) {
+    event.preventDefault();
+
+    setSearchTerm(event.target.value);
+
+    /*     setBairro(data.bairro);
+    setCidade(data.cidade);
+    setCodImovel(data.cod_imovel); */
+  }
+
   return (
     <Container>
       <Title>{title}</Title>
@@ -18,6 +31,17 @@ export default function FilterBar({ title }) {
         <Input filterBar placeholder="Digite uma cidade, bairro ou código do imóvel" />
         <FiSearch size={15} color="#444444" />
       </BoxSearch>
+      {searchTerm && (
+        allImoveis.map((imovel) => (
+          <Input
+            suggestion
+            type="button"
+            value={Number(searchTerm) ? `COD. ${imovel.cod_imovel} - ${imovel.tipo_imovel} para ${imovel.tipo_negocio} em ${imovel.bairro} - ${imovel.cidade}/${imovel.estado}` : `${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
+            key={imovel.cod_imovel}
+            onClick={(event) => handleSelectSearchImovel(event, { bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
+          />
+        ))
+      )}
 
       <BoxInfo>
         <Localizacao>
@@ -156,6 +180,37 @@ export default function FilterBar({ title }) {
   );
 }
 
+/* FilterBar.defaultProps = {
+  allImoveis: PropTypes.arrayOf,
+};
+ */
 FilterBar.propTypes = {
   title: PropTypes.string.isRequired,
+  allImoveis: PropTypes.arrayOf(PropTypes.shape({
+    bairro: 'Piatã',
+    banheiros: '2',
+    cidade: 'Salvador',
+    cod_imovel: 40,
+    comodidades: ['Piscina', 'Cozinha gourmet', 'Garagem', 'Churrasqueira'],
+    complemento: 'Casa 47',
+    condominio: null,
+    cpf_cnpj_proprietario: '07010305692',
+    data_alteracao: '2022-10-22T06:00:00.000Z',
+    data_cadastro: '2022-10-22T06:00:00.000Z',
+    data_vencimento_pagamento: '20',
+    descricao: 'Casa com 2 vagas, 3 quartos e ar condicionado.',
+    estado: 'BA',
+    iptu: null,
+    metragem: '200',
+    numero: '22',
+    numero_registro: '06',
+    quartos: '1',
+    rua: 'Rua Camuripeba',
+    situacao: 'disponível',
+    tipo_imovel: 'casa',
+    tipo_negocio: 'venda',
+    titulo: null,
+    vagas: '4',
+    valor: 'R$50.000,00',
+  })).isRequired,
 };

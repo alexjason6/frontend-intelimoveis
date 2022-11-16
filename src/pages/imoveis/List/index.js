@@ -19,6 +19,7 @@ import Footer from '../../../components/Footer';
 
 export default function ListImoveis() {
   const [imoveis, setImoveis] = useState([]);
+  const [allImoveis, setAllImoveis] = useState([]);
 
   async function getImoveis() {
     const response = localStorage.getItem('imoveis');
@@ -26,18 +27,23 @@ export default function ListImoveis() {
     setImoveis(JSON.parse(response));
   }
 
+  function getAllImoveis() {
+    const response = localStorage.getItem('imoveis');
+
+    setAllImoveis(JSON.parse(response));
+  }
+
   useEffect(() => {
     getImoveis();
+    getAllImoveis();
   }, []);
-
-  console.log(imoveis);
 
   return (
     <Container>
       <Header />
       <BreadCrumbs />
       <Content>
-        <FilterBar title="Filtrar resultados" />
+        <FilterBar title="Filtrar resultados" allImoveis={allImoveis} />
         <ImoveisContent>
           <PageHeader title="Casas à venda em Salvador." description={`Sua busca resultou em ${imoveis.length} ${imoveis.length > 1 ? 'imóveis' : 'imovel'}.`}>
             <Buttons>

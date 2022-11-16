@@ -66,7 +66,7 @@ export default function Home() {
 
       navigate.push({ pathname: '/imoveis/list', name: 'Resultado da busca' });
     } catch {
-      console.log('Erro', codImovel);
+      alert('Erro ao buscar imóveis', codImovel);
     }
   }
 
