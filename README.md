@@ -15,7 +15,7 @@ Você precisa ter instalado em sua máquina os itens abaixo:
 
 •[Docker](https://www.docker.com) com uma imagem postgres,
 
-•[Back-end](https://github.com/alexjason6/backend-intelimoveis).
+•[API - Backe-end](https://github.com/alexjason6/backend-intelimoveis).
 
 
 Após tudo instalado, clonar o repositório abaixo:
