@@ -6,23 +6,30 @@ Para as imobiliárias e corretores será possível fazer o cadastro dos imóveis
 Site completo de busca de imóveis disponíveis para negócio.
 
 Este projeto utiliza Create React App e uma API em NodeJS, Docker e PostgreSQL.
-Back-end -> [Back-end](https://github.com/alexjason6/backend-intelimoveis).
 
 ## Instalação
 
-Você precisa ter o [NodeJS](https://nodejs.org) instalado em sua máquina, e, após isso, clonar o repositório abaixo:
+Você precisa ter instalado em sua máquina os itens abaixo:
+•[NodeJS](https://nodejs.org),
+•[Docker](https://www.docker.com) com uma imagem postgres,
+•[Back-end](https://github.com/alexjason6/backend-intelimoveis).
+
+
+Após tudo instalado, clonar o repositório abaixo:
 ```sh
   $ git clone https://github.com/alexjason6/frontend_intelimoveis.git
 ```
 
-Depois disso, instale as dependências do Back-end:
+Depois disso, instale as dependências do Front-end:
 ```sh
   $ yarn install # ou npm install
 ```
 
 ## Executando a aplicação
 
-Execute o seguinte comando:
+Rode o Docker, e a imagem postgres, crie um banco de dados e roder o Back-end.
+
+Após rodaro back-end execute o seguinte comando:
 ```sh
   $ yarn start # ou npm run start
 ```
