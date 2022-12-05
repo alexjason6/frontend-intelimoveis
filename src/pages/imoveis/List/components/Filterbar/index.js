@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FiSearch, FiX } from 'react-icons/fi';
-import { Button } from '../../../../../components/button';
 
+import IntelimoveisServices from '../../../../../services/IntelimoveisServices';
+
+import { Button } from '../../../../../components/button';
 import { Input } from '../../../../../components/input';
 import { Select } from '../../../../../components/select';
 
@@ -11,32 +13,57 @@ import {
 } from './styles';
 
 export default function FilterBar({ title, allImoveis }) {
+  const [imoveis, setImoveis] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
+  const [imoveisFiltered, setImoveisFiltered] = useState([]);
+  const [cidades, setCidades] = useState([allImoveis[0].cidade]);
 
-  function handleSelectSearchImovel(event /* data */) {
+  console.log([allImoveis[0].cidade]);
+
+  async function getInitialImoveis() {
+    await IntelimoveisServices.getImoveis()
+      .then((response) => setImoveis(response));
+  }
+
+  function getInitialCity() {
+    setCidades();
+  }
+
+  function handleSelectSearchImovel(event) {
     event.preventDefault();
 
     setSearchTerm(event.target.value);
+
+    const filterByCityOrNeighborOrCode = imoveis.filter((imovel) => imovel.cidade.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.bairro.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.cod_imovel === Number(event.target.value));
+    const removeDuplicates = filterByCityOrNeighborOrCode.filter((value, index, array) => array.findIndex((secondValue) => (secondValue.cidade === value.cidade)) === index);
+
+    setImoveisFiltered(removeDuplicates.sort((a, b) => (a > b ? 1 : -1)));
 
     /*     setBairro(data.bairro);
     setCidade(data.cidade);
     setCodImovel(data.cod_imovel); */
   }
 
+  useEffect(() => {
+    getInitialCity();
+    getInitialImoveis();
+  }, []);
+
   return (
     <Container>
       <Title>{title}</Title>
       <Label>Localização</Label>
       <BoxSearch>
-        <Input filterBar placeholder="Digite uma cidade, bairro ou código do imóvel" />
+        <Input filterBar placeholder="Digite uma cidade, bairro ou código do imóvel" onChange={(event) => handleSelectSearchImovel(event)} />
         <FiSearch size={15} color="#444444" />
       </BoxSearch>
-      {searchTerm && (
-        allImoveis.map((imovel) => (
+      {searchTerm.length >= 3 && (
+        imoveisFiltered.map((imovel) => (
           <Input
             suggestion
+            suggestionFilter
             type="button"
-            value={Number(searchTerm) ? `COD. ${imovel.cod_imovel} - ${imovel.tipo_imovel} para ${imovel.tipo_negocio} em ${imovel.bairro} - ${imovel.cidade}/${imovel.estado}` : `${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
+            value={`${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
             key={imovel.cod_imovel}
             onClick={(event) => handleSelectSearchImovel(event, { bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
           />
@@ -49,7 +76,9 @@ export default function FilterBar({ title, allImoveis }) {
           <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
         </Localizacao>
         <Localizacao>
-          <span>Salvador/BA </span>
+          <span>
+            {cidades && cidades[0] }
+          </span>
           <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
         </Localizacao>
       </BoxInfo>

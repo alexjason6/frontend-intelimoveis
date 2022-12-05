@@ -36,6 +36,11 @@ export const Input = styled.input`
     cursor: pointer;
   `};
 
+  ${({ suggestionFilter }) => suggestionFilter && css`
+    font-size: 10px;
+    padding: 4px 10px;
+  `};
+
   ${({ filterBar }) => filterBar && css`
     width: 90%;
     font-size: 10px;

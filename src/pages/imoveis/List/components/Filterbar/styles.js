@@ -32,7 +32,7 @@ export const Label = styled.span`
 export const BoxSearch = styled.div`
   width: 100%;
   padding: 0px 5px;
-  margin: 10px 0px;
+  margin: 10px 0px 1px 0px;
   background: ${({ theme }) => theme.colors.grays.lighter};
   border-radius: 4px;
   display: flex;
