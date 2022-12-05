@@ -61,12 +61,9 @@ export const BoxInfo = styled.div`
 `;
 
 export const Localizacao = styled.div`
-  & + & {
-    margin: 0 10px;
-  }
-
   font-size: 10px;
   padding: 5px 10px;
+  margin: 3px 5px;
   border: 1px solid ${({ theme }) => theme.colors.primary.main};
   border-radius: 4px;
   color: ${({ theme }) => theme.colors.primary.main};

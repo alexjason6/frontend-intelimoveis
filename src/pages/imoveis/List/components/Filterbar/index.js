@@ -16,9 +16,7 @@ export default function FilterBar({ title, allImoveis }) {
   const [imoveis, setImoveis] = useState([]);
   const [searchTerm, setSearchTerm] = useState([]);
   const [imoveisFiltered, setImoveisFiltered] = useState([]);
-  const [cidades, setCidades] = useState([allImoveis[0].cidade]);
-
-  console.log([allImoveis[0].cidade]);
+  const [cidades, setCidades] = useState([]);
 
   async function getInitialImoveis() {
     await IntelimoveisServices.getImoveis()
@@ -26,7 +24,9 @@ export default function FilterBar({ title, allImoveis }) {
   }
 
   function getInitialCity() {
-    setCidades();
+    if (allImoveis) {
+      setCidades('Oi');
+    }
   }
 
   function handleSelectSearchImovel(event) {
@@ -77,7 +77,13 @@ export default function FilterBar({ title, allImoveis }) {
         </Localizacao>
         <Localizacao>
           <span>
-            {cidades && cidades[0] }
+            {allImoveis[0].cidade}
+          </span>
+          <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
+        </Localizacao>
+        <Localizacao>
+          <span>
+            {cidades}
           </span>
           <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
         </Localizacao>
