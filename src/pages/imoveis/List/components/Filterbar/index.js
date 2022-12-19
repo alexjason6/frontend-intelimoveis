@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FiSearch, FiX } from 'react-icons/fi';
-
-import IntelimoveisServices from '../../../../../services/IntelimoveisServices';
 
 import { Button } from '../../../../../components/button';
 import { Input } from '../../../../../components/input';
@@ -12,49 +10,75 @@ import {
   Container, Title, Label, BoxSearch, Localizacao, BoxInfo,
 } from './styles';
 
-export default function FilterBar({ title, allImoveis }) {
-  const [imoveis, setImoveis] = useState([]);
+export default function FilterBar({ title, imoveis, allImoveis }) {
   const [searchTerm, setSearchTerm] = useState([]);
   const [imoveisFiltered, setImoveisFiltered] = useState([]);
-  const [cidades, setCidades] = useState([]);
+  const dadosIniciais = { cidade: imoveis[0].cidade, bairro: imoveis[0].bairro };
+  const [cidades, setCidades] = useState([dadosIniciais.cidade]);
+  const [bairros, setBairros] = useState([dadosIniciais.bairro]);
 
-  async function getInitialImoveis() {
-    await IntelimoveisServices.getImoveis()
-      .then((response) => setImoveis(response));
-  }
-
-  function getInitialCity() {
-    if (allImoveis) {
-      setCidades('Oi');
-    }
-  }
-
-  function handleSelectSearchImovel(event) {
+  function handleFilterImoveis(event) {
     event.preventDefault();
 
     setSearchTerm(event.target.value);
 
-    const filterByCityOrNeighborOrCode = imoveis.filter((imovel) => imovel.cidade.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.bairro.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.cod_imovel === Number(event.target.value));
+    const filterByCityOrNeighborOrCode = allImoveis.filter((imovel) => imovel.cidade.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.bairro.toLowerCase().includes(event.target.value.toLowerCase()) || imovel.cod_imovel === Number(event.target.value));
     const removeDuplicates = filterByCityOrNeighborOrCode.filter((value, index, array) => array.findIndex((secondValue) => (secondValue.cidade === value.cidade)) === index);
 
     setImoveisFiltered(removeDuplicates.sort((a, b) => (a > b ? 1 : -1)));
-
-    /*     setBairro(data.bairro);
-    setCidade(data.cidade);
-    setCodImovel(data.cod_imovel); */
   }
 
-  useEffect(() => {
-    getInitialCity();
-    getInitialImoveis();
-  }, []);
+  function handleAddBairroSearch(neighbor) {
+    const bairroExists = bairros.find((bairro) => bairro === neighbor);
+
+    if (!bairroExists) {
+      setBairros([...bairros, neighbor]);
+      setSearchTerm('');
+    }
+
+    if (bairroExists) {
+      alert('Bairro já filtrado. - Mudar esse alerta por um toatAlert.');
+    }
+  }
+
+  function handleAddCitySearch(dataImovel) {
+    const cidadesExists = cidades.find((cidade) => cidade === dataImovel.cidade);
+
+    if (!cidadesExists) {
+      setCidades([...cidades, dataImovel.cidade]);
+      handleAddBairroSearch(dataImovel.bairro);
+      setSearchTerm('');
+    }
+
+    if (cidadesExists) {
+      alert('Cidade já filtrada. - Mudar esse alerta por um toatAlert.');
+    }
+  }
+
+  function handleRemoveCitiesSearch(city) {
+    const cidadesExists = cidades.find((cidade) => cidade === city);
+
+    if (cidadesExists) {
+      const remove = cidades.filter((cidade) => cidade !== cidadesExists);
+      setCidades(remove);
+    }
+  }
+
+  function handleRemoveBairrosSearch(neighbor) {
+    const cidadesExists = bairros.find((bairro) => bairro === neighbor);
+
+    if (cidadesExists) {
+      const remove = bairros.filter((bairro) => bairro !== cidadesExists);
+      setBairros(remove);
+    }
+  }
 
   return (
     <Container>
       <Title>{title}</Title>
       <Label>Localização</Label>
       <BoxSearch>
-        <Input filterBar placeholder="Digite uma cidade, bairro ou código do imóvel" onChange={(event) => handleSelectSearchImovel(event)} />
+        <Input filterBar value={searchTerm} placeholder="Digite uma cidade, bairro ou código do imóvel" onChange={(event) => handleFilterImoveis(event)} />
         <FiSearch size={15} color="#444444" />
       </BoxSearch>
       {searchTerm.length >= 3 && (
@@ -65,28 +89,29 @@ export default function FilterBar({ title, allImoveis }) {
             type="button"
             value={`${imovel.bairro} - ${imovel.cidade}/${imovel.estado}`}
             key={imovel.cod_imovel}
-            onClick={(event) => handleSelectSearchImovel(event, { bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
+            onClick={() => handleAddCitySearch({ bairro: imovel.bairro, cidade: imovel.cidade, cod_imovel: imovel.cod_imovel })}
           />
         ))
       )}
 
       <BoxInfo>
-        <Localizacao>
-          <span>Piatã/BA </span>
-          <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
-        </Localizacao>
-        <Localizacao>
-          <span>
-            {allImoveis[0].cidade}
-          </span>
-          <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
-        </Localizacao>
-        <Localizacao>
-          <span>
-            {cidades}
-          </span>
-          <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} />
-        </Localizacao>
+        {bairros && bairros.map((item) => (
+          <Localizacao key={item}>
+            <span>
+              {item}
+            </span>
+            <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} onClick={() => handleRemoveBairrosSearch(item)} />
+          </Localizacao>
+        ))}
+
+        {cidades && cidades.map((item) => (
+          <Localizacao key={item}>
+            <span>
+              {item}
+            </span>
+            <FiX size={12} color="#ffffff" style={{ background: '#0da52e', marginLeft: 10, borderRadius: 2 }} onClick={() => handleRemoveCitiesSearch(item)} />
+          </Localizacao>
+        ))}
       </BoxInfo>
 
       <Label>Tipo do imóvel</Label>
@@ -221,6 +246,34 @@ export default function FilterBar({ title, allImoveis }) {
  */
 FilterBar.propTypes = {
   title: PropTypes.string.isRequired,
+  imoveis: PropTypes.arrayOf(PropTypes.shape({
+    bairro: 'Piatã',
+    banheiros: '2',
+    cidade: 'Salvador',
+    cod_imovel: 40,
+    comodidades: ['Piscina', 'Cozinha gourmet', 'Garagem', 'Churrasqueira'],
+    complemento: 'Casa 47',
+    condominio: null,
+    cpf_cnpj_proprietario: '07010305692',
+    data_alteracao: '2022-10-22T06:00:00.000Z',
+    data_cadastro: '2022-10-22T06:00:00.000Z',
+    data_vencimento_pagamento: '20',
+    descricao: 'Casa com 2 vagas, 3 quartos e ar condicionado.',
+    estado: 'BA',
+    iptu: null,
+    metragem: '200',
+    numero: '22',
+    numero_registro: '06',
+    quartos: '1',
+    rua: 'Rua Camuripeba',
+    situacao: 'disponível',
+    tipo_imovel: 'casa',
+    tipo_negocio: 'venda',
+    titulo: null,
+    vagas: '4',
+    valor: 'R$50.000,00',
+  })).isRequired,
+
   allImoveis: PropTypes.arrayOf(PropTypes.shape({
     bairro: 'Piatã',
     banheiros: '2',
